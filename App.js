@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -21,60 +21,61 @@ import {
 import socketService from './src/utils/socketService';
 import Routes from './src/Navigation/Routes';
 const App = () => {
-  return <Routes />;
-  // const [message, setmessage] = useState('');
-  // const [data, setdata] = useState([]);
-  // useEffect(() => {
-  //   socketService.initializeSocket();
-  // }, []);
-  // useEffect(() => {
-  //   socketService.on('recieved_message', msg => {
-  //     console.log('message received in App', msg);
-  //     let cloneArray = [...data];
-  //     setdata(cloneArray.concat(msg));
-  //   });
-  // }, [data]);
-  // const isDarkMode = useColorScheme() === 'dark';
-  // const sendMessage = () => {
-  //   if (!!message) {
-  //     socketService.emit('send_message', message);
-  //     setmessage('');
-  //     return;
-  //   }
-  //   alert('please eneter message');
-  // };
-  // return (
-  //   <SafeAreaView style={{flex: 1}}>
-  //     <View style={styles.container}>
-  //       <View
-  //         style={{
-  //           flexDirection: 'row',
-  //           justifyContent: 'space-between',
-  //           marginBottom: 6,
-  //         }}>
-  //         <View style={{flex: 0.9}}>
-  //           <TextInput
-  //             value={message}
-  //             placeholder="Enter you message"
-  //             style={styles.inputStyle}
-  //             onChangeText={text => setmessage(text)}></TextInput>
-  //         </View>
+  // return <Routes />;
+  const [message, setmessage] = useState('');
+  const [data, setdata] = useState([]);
+  useEffect(() => {
+    socketService.initializeSocket();
+  }, []);
+  useEffect(() => {
+    socketService.on('recieved_message', msg => {
+      console.log('message received in App', msg);
+      let cloneArray = [...data];
+      setdata(cloneArray.concat(msg));
+    });
+  }, [data]);
+  const isDarkMode = useColorScheme() === 'dark';
+  const sendMessage = () => {
+    if (!!message) {
+      socketService.emit('send_message', message);
+      setmessage('');
+      return;
+    }
+    alert('please eneter message');
+  };
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 6,
+          }}>
+          <View style={{flex: 0.9}}>
+            <TextInput
+              value={message}
+              placeholder="Enter you message"
+              style={styles.inputStyle}
+              onChangeText={text => setmessage(text)}></TextInput>
+          </View>
 
-  //         <View style={{flex: 0.2}}>
-  //           <Button onPress={sendMessage} title="send">
-  //             {' '}
-  //           </Button>
-  //         </View>
-  //       </View>
-  //       {data.map((i, index) => {
-  //         return (
-  //           <Text style={{marginBottom: 8, fontWeight: 'bold', color: 'black'}}>
-  //             {i}
-  //           </Text>
-  //         );
-  //       })}
-  //     </View>
-  //   </SafeAreaView>
+          <View style={{flex: 0.2}}>
+            <Button onPress={sendMessage} title="send">
+              {' '}
+            </Button>
+          </View>
+        </View>
+        {data.map((i, index) => {
+          return (
+            <Text style={{marginBottom: 8, fontWeight: 'bold', color: 'black'}}>
+              {i}
+            </Text>
+          );
+        })}
+      </View>
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
